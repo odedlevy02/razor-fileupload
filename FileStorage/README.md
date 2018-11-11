@@ -15,7 +15,9 @@ This package wraps up logic required to work with uploading and downloading of f
     ```
     let manager = new FileUploadManager();
     ```
-5. Use the 'uploadFiles' method to upload the files
+## Uploading a file or list of files
+
+Use the 'FileUploadManager.uploadFiles' method to upload the files
 
 There are minor differences in the __uploadFiles__ methods when saving to the local files system vs saving to S3
 
@@ -49,3 +51,13 @@ To use the __uploadFiles__ methods for uploading to S3 set the following method 
 
 The git project contains a full sample of a an Express server that uses the razor-fileupload package. The tester is linked to the package so make sure to use the __npm link__ or if you are not familiar just add the package using npm install.
 >NOTE - make sure to set the environment params in file config/.env
+
+## Deleting a file
+
+To delete a file use the 'FileUploadManager.deleteFile' method giving it the unique file name that was created during the file save and the storage location
+
+#### Deleting from local file system
+When deleting from local file system the second method param is the folder location of the saved files
+
+#### Deleting from S3
+When deleting from S3 the second method param is the name of the bucket
