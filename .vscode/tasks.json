@@ -1,0 +1,25 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "compile-file-upload",
+            "type": "typescript",
+            "tsconfig": "FileStorage\\tsconfig.json",
+            "option": "watch",
+            "problemMatcher": [
+                "$tsc-watch"
+            ]
+        },
+        {
+            "label": "compile-file-storage-tester",
+            "type": "typescript",
+            "tsconfig": "fileStorageTester\\tsconfig.json",
+            "option": "watch",
+            "problemMatcher": [
+                "$tsc-watch"
+            ]
+        }
+    ]
+}
