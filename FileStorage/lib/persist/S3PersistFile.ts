@@ -4,7 +4,6 @@ import * as stream from "stream"
 import * as url from "url";
 import { IPersistFile } from "./IPersistFile";
 import { IFileMetadata } from '../dataModels/IFileMetadata';
-import { ImageExtensions } from '../dataModels/imageExtensions';
 
 export class S3PersistFile implements IPersistFile {
     
@@ -92,8 +91,10 @@ export class S3PersistFile implements IPersistFile {
         });
     }
 
-    private isImage(extension: ImageExtensions|string): boolean {
-        return !!ImageExtensions[extension];
+    private isImage(extension: string): boolean {
+        return this.imagesExt.includes(extension.toLowerCase());
     }
+
+    private imagesExt=["png","jpg","jpeg"]
 
 }
