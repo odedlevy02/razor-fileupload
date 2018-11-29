@@ -20,6 +20,11 @@
             "problemMatcher": [
                 "$tsc-watch"
             ]
+        },
+        {
+            "label": "compile-all",
+            "dependsOn":["compile-file-storage-tester","compile-file-upload"]
         }
+
     ]
 }

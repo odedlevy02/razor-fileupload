@@ -21,6 +21,40 @@ Use the 'FileUploadManager.uploadFiles' method to upload the files
 
 There are minor differences in the __uploadFiles__ methods when saving to the local files system vs saving to S3
 
+#### Return value
+If upload succeeded the result from the upload manager will be:
+```
+{
+    files:IFileMetadata[],
+    reqestMetadata:any
+}
+```
+A single file metadata will include the following fields:
+```
+{
+    id?:number
+    fileName:string,
+    fileExtension?:string,
+    fileUniqueName:string,
+    fileUrl?:string
+}
+```
+
+#### Sending metadata with the files
+It is useful to send metadata with the files uploaded.
+In order to send a single field that contains additional metadata add to your forms a field named 'data' and inside insert a json that is parsed to a string.
+Here is a code sample of the client side:
+```
+const formData: FormData = new FormData();
+//Append the files to the form data
+for (let i = 0; i < files.length; i++) {
+    formData.append(i.toString(), files[i], files[i].name);
+}
+//append additional data 
+formData.append("data", JSON.stringify(data));
+```
+The FileUploadManager will return the data inside the __reqestMetadata__ result field
+
 #### Upload to the local file system
 When saving to the local file system the following params are required inside the __uploadFiles__ method:
 1. req - The Express request containing the embedded files

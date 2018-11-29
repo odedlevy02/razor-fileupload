@@ -3,29 +3,30 @@ import { IFileMetadata } from "../dataModels/IFileMetadata";
 import * as formidable from 'formidable';
 import * as uuid from "uuid/v1"
 import { PersistTypes } from "../dataModels/persistTypes";
-
+import { IFilesUploadResponse } from "../dataModels/IFilesUploadResponse";
 export class FileUploadManager{
 
-    uploadFiles = async (req:Express.Request,persistType:PersistTypes|string,saveToFolderPath:string,linkToFolderUrl?:string):Promise<IFileMetadata[]>=> {
-        let uploads = await this.getFilesListFromRequest(req);
+    uploadFiles = async (req:Express.Request,persistType:PersistTypes|string,saveToFolderPath:string,linkToFolderUrl?:string):Promise<IFilesUploadResponse>=> {
+        let uploadsRes = await this.getFilesListFromRequest(req);
         let ipersist = new PersistFactory().createPersist(persistType);
         try {
-            uploads = await ipersist.uploadFiles(uploads,saveToFolderPath,linkToFolderUrl); //update with file full path
+            uploadsRes.files = await ipersist.uploadFiles(uploadsRes.files,saveToFolderPath,linkToFolderUrl); //update with file full path
         }catch(err){
             return err
         }
         //Clean data before sending to client
-        uploads.forEach(file=>{
+        uploadsRes.files.forEach(file=>{
             delete (<any>file).tempPath;
         })
-        return uploads;
+        return uploadsRes;
     }
 
     //extract files from req
-    private getFilesListFromRequest=(req):Promise<IFileMetadata[]>=>{
-        return new Promise<IFileMetadata[]>((resolve,reject)=>{
+    private getFilesListFromRequest=(req):Promise<IFilesUploadResponse>=>{
+        return new Promise<IFilesUploadResponse>((resolve,reject)=>{
             let form = new formidable.IncomingForm();
             let uploads:IFileMetadata[]=[];
+            let data = null;
             form.multiples = true;
             form.on("file", (field, file) => {
                 const fileNameParts = file.name.split('.');
@@ -37,6 +38,16 @@ export class FileUploadManager{
                     tempPath:file.path,
                 });
             })
+            form.on('field', function (name, val) {
+                if (name == "data") { //only parse if receved key data
+                    try{
+                        data = JSON.parse(val)
+                    }catch(err){
+                        data = {error:"error when parsing data to json",origValue:val}
+                    }
+                    
+                }
+            });
             // log any errors that occur
             form.on('error', function (err) {
                 console.log('An error has occured when uploading files: \n' + err);
@@ -45,7 +56,7 @@ export class FileUploadManager{
             // once all the files have been uploaded, send a response to the client
             form.on('end',  async ()=> {
                 //try to save the file to relevant persistance
-                resolve(uploads);
+                resolve({files:uploads,reqestMetadata:data});
             });
             // parse the incoming request containing the form data
             form.parse(<any>req);
@@ -75,3 +86,4 @@ export class FileUploadManager{
         }
     }
 }
+
