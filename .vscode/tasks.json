@@ -22,8 +22,20 @@
             ]
         },
         {
+            "label": "compile-file-download-service",
+            "type": "typescript",
+            "tsconfig": "fileDownloadService\\tsconfig.json",
+            "option": "watch",
+            "problemMatcher": [
+                "$tsc-watch"
+            ]
+        },
+        {
             "label": "compile-all",
-            "dependsOn":["compile-file-storage-tester","compile-file-upload"]
+            "dependsOn":["compile-file-storage-tester","compile-file-upload","compile-file-download-service"],
+            "problemMatcher": [
+             
+            ]
         }
 
     ]

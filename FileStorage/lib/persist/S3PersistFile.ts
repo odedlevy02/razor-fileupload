@@ -72,19 +72,19 @@ export class S3PersistFile implements IPersistFile {
     }
 
     //return a stream from s3
-    downloadFile(file: IFileMetadata,bucketName:string): Promise<stream> {
+    downloadFile(fileUniqueName:string,bucketName:string):Promise<stream>{
         return new Promise<stream>((resolve, reject) => {
-            let getPArams = {
+            let getParams = {
                 Bucket: bucketName,
-                Key: `${file.fileUniqueName}`
+                Key: `${fileUniqueName}`
             };
             //before getting an object validate it exists
-            new AWS.S3().headObject(getPArams, (err, data) => {
+            new AWS.S3().headObject(getParams, (err, data) => {
                 if (err) {
-                    console.error(`Download request from S3 for file ${file.fileUniqueName} failed since file does not exist. Error: ${err.name}`);
-                    reject(new Error(`Download request from S3 for file ${file.fileUniqueName} failed since file does not exist. View logs for details`));
+                    console.error(`Download request from S3 for file ${fileUniqueName} failed since file does not exist. Error: ${err.name}`);
+                    reject(new Error(`Download request from S3 for file ${fileUniqueName} failed since file does not exist. View logs for details`));
                 } else {
-                    let stream = new AWS.S3().getObject(getPArams).createReadStream()
+                    let stream = new AWS.S3().getObject(getParams).createReadStream()
                     resolve(stream);
                 }
             })

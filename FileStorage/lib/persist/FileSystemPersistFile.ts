@@ -68,12 +68,12 @@ export class FileSystemPersistFile implements IPersistFile {
         })
     }
 
-    downloadFile(file: IFileMetadata, folderPath: string): Promise<Readable> {
-        let fullPath = path.join(folderPath, file.fileUniqueName);
+    downloadFile(fileName: string, folderPath: string): Promise<Readable> {
+        let fullPath = path.join(folderPath, fileName);
         if (fs.existsSync(fullPath)) {
             return Promise.resolve(fs.createReadStream(fullPath))
         } else {
-            console.error(`Error when trying to download file ${file.fileUniqueName} from file system. File does not exist`);
+            console.error(`Error when trying to download file ${fileName} from file system. File does not exist`);
             return Promise.reject(new Error("Error when trying to download file from file system. View logs for details"))
         }
 

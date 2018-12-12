@@ -1,4 +1,4 @@
-import { IFileMetadata } from "../..";
+import { IFileMetadata } from "./IFileMetadata";
 
 export type IFilesUploadResponse={
     files:IFileMetadata[],

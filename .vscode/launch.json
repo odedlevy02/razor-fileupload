@@ -7,8 +7,15 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Program",
-            "program": "${workspaceFolder}/fileStorageTester\\index.js",
+            "name": "file-download-service (one time exec)",
+            "program": "${workspaceFolder}/fileDownloadService/index.js",
+            "cwd": "${workspaceFolder}/fileDownloadService",
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "file-storage-tester",
+            "program": "${workspaceFolder}/fileStorageTester/index.js",
             "cwd": "${workspaceFolder}/fileStorageTester",
             "outFiles": [
                 "${workspaceFolder}/**/*.js"
