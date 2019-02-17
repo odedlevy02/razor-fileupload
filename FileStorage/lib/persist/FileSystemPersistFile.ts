@@ -9,7 +9,7 @@ export class FileSystemPersistFile implements IPersistFile {
     constructor() {
     }
 
-    uploadFiles = async (files: IFileMetadata[], saveToFolderPath: string, linkToFolderUrl?: string): Promise<IFileMetadata[]> => {
+    uploadFiles = async (files: IFileMetadata[], saveToFolderPath: string, linkToFolderUrl?: string,makeImagesPublic:boolean=false): Promise<IFileMetadata[]> => {
         this.validateFolderExists(saveToFolderPath);
         //iterate over files and save each one
         for (let file of files) {

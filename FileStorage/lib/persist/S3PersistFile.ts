@@ -11,11 +11,11 @@ export class S3PersistFile implements IPersistFile {
         AWS.config.update({region: process.env.AWS_REGION});
     }
 
-    async uploadFiles(files: IFileMetadata[],saveToStoragePath:string,linkToStorageUrl?:string): Promise<IFileMetadata[]> {
+    async uploadFiles(files: IFileMetadata[],saveToStoragePath:string,linkToStorageUrl?:string,makeImagesPublic:boolean=false): Promise<IFileMetadata[]> {
         for (let file of files) {
             let stream = fs.createReadStream((<any>file).tempPath);
             let isFileImage = this.isImage(file.fileExtension)
-            await this.addFileToBucket(file.fileUniqueName,saveToStoragePath,isFileImage, stream);
+            await this.addFileToBucket(file.fileUniqueName,saveToStoragePath,isFileImage, stream,makeImagesPublic);
             //update file location
             if(linkToStorageUrl){
                 //if link does not end with '/' the url.resolve will just remove it
@@ -28,15 +28,17 @@ export class S3PersistFile implements IPersistFile {
         return files;
     }
 
-    addFileToBucket = (fileName: string,bucketName:string,isImage:boolean, fileStream: stream): Promise<any> => {
+    addFileToBucket = (fileName: string,bucketName:string,isImage:boolean, fileStream: stream,makeImagesPublic:boolean): Promise<any> => {
         return new Promise<any>((resolve, reject) => {
             let putParams = {
                 Bucket: bucketName,
                 Key: `${fileName}`,
                 Body: fileStream
             };
-            if (isImage) {
-                putParams["ACL"] = 'public-read';
+            if (isImage ) {
+                if(makeImagesPublic){
+                    putParams["ACL"] = 'public-read';
+                }
                 putParams["ContentType"] =  'image/jpeg';
             }
             let s3 = new AWS.S3();
