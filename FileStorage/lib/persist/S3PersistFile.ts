@@ -35,7 +35,7 @@ export class S3PersistFile implements IPersistFile {
                 Key: `${fileName}`,
                 Body: fileStream
             };
-            if (isImage ) {
+            if (isImage && makeImagesPublic ) {
                 if(makeImagesPublic){
                     putParams["ACL"] = 'public-read';
                 }
@@ -47,7 +47,7 @@ export class S3PersistFile implements IPersistFile {
                     console.error(`S3PersistFile.addFileToBucket. Error when trying to add file '${fileName}' to bucket: '${bucketName}'`, putErr);
                     reject(putErr)
                 } else {
-                    console.log(`S3PersistFile.addFileToBucket: successfuly added file '${fileName}' to bucket: '${bucketName}'`);
+                    console.log(`S3PersistFile.addFileToBucket: successfully added file '${fileName}' to bucket: '${bucketName}'`);
                     resolve(putData);
                 }
             });
