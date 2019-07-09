@@ -6,11 +6,11 @@ import { PersistTypes } from "../dataModels/persistTypes";
 import { IFilesUploadResponse } from "../dataModels/IFilesUploadResponse";
 export class FileUploadManager{
 
-    uploadFiles = async (req:Express.Request,persistType:PersistTypes|string,saveToFolderPath:string,linkToFolderUrl?:string):Promise<IFilesUploadResponse>=> {
+    uploadFiles = async (req:Express.Request,persistType:PersistTypes|string,saveToFolderPath:string,linkToFolderUrl?:string,makePublic:boolean=false):Promise<IFilesUploadResponse>=> {
         let uploadsRes = await this.getFilesListFromRequest(req);
         let iPersist = new PersistFactory().createPersist(persistType);
         try {
-            uploadsRes.files = await iPersist.uploadFiles(uploadsRes.files,saveToFolderPath,linkToFolderUrl); //update with file full path
+            uploadsRes.files = await iPersist.uploadFiles(uploadsRes.files,saveToFolderPath,linkToFolderUrl,makePublic); //update with file full path
         }catch(err){
             return err
         }

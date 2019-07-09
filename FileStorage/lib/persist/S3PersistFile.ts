@@ -11,11 +11,11 @@ export class S3PersistFile implements IPersistFile {
         AWS.config.update({region: process.env.AWS_REGION});
     }
 
-    async uploadFiles(files: IFileMetadata[],saveToStoragePath:string,linkToStorageUrl?:string,makeImagesPublic:boolean=false): Promise<IFileMetadata[]> {
+    async uploadFiles(files: IFileMetadata[],saveToStoragePath:string,linkToStorageUrl?:string,makePublic:boolean=false): Promise<IFileMetadata[]> {
         for (let file of files) {
             let stream = fs.createReadStream((<any>file).tempPath);
             let isFileImage = this.isImage(file.fileExtension)
-            await this.addFileToBucket(file.fileUniqueName,saveToStoragePath,isFileImage, stream,makeImagesPublic);
+            await this.addFileToBucket(file.fileUniqueName,saveToStoragePath,isFileImage, stream,makePublic);
             //update file location
             if(linkToStorageUrl){
                 //if link does not end with '/' the url.resolve will just remove it
@@ -28,18 +28,18 @@ export class S3PersistFile implements IPersistFile {
         return files;
     }
 
-    addFileToBucket = (fileName: string,bucketName:string,isImage:boolean, fileStream: stream,makeImagesPublic:boolean): Promise<any> => {
+    addFileToBucket = (fileName: string,bucketName:string,isImage:boolean, fileStream: stream,makePublic:boolean): Promise<any> => {
         return new Promise<any>((resolve, reject) => {
             let putParams = {
                 Bucket: bucketName,
                 Key: `${fileName}`,
                 Body: fileStream
             };
-            if (isImage && makeImagesPublic ) {
-                if(makeImagesPublic){
-                    putParams["ACL"] = 'public-read';
-                }
+            if (isImage ) {
                 putParams["ContentType"] =  'image/jpeg';
+            }
+            if(makePublic){
+                putParams["ACL"] = 'public-read';
             }
             let s3 = new AWS.S3();
             s3.putObject(putParams, function (putErr, putData) {

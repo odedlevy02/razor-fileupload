@@ -6,7 +6,7 @@
         {
             "label": "compile-file-upload",
             "type": "typescript",
-            "tsconfig": "FileStorage\\tsconfig.json",
+            "tsconfig": "FileStorage/tsconfig.json",
             "option": "watch",
             "problemMatcher": [
                 "$tsc-watch"
@@ -15,7 +15,7 @@
         {
             "label": "compile-file-storage-tester",
             "type": "typescript",
-            "tsconfig": "fileStorageTester\\tsconfig.json",
+            "tsconfig": "fileStorageTester/tsconfig.json",
             "option": "watch",
             "problemMatcher": [
                 "$tsc-watch"
@@ -24,7 +24,7 @@
         {
             "label": "compile-file-download-service",
             "type": "typescript",
-            "tsconfig": "fileDownloadService\\tsconfig.json",
+            "tsconfig": "fileDownloadService/tsconfig.json",
             "option": "watch",
             "problemMatcher": [
                 "$tsc-watch"
@@ -32,11 +32,13 @@
         },
         {
             "label": "compile-all",
-            "dependsOn":["compile-file-storage-tester","compile-file-upload","compile-file-download-service"],
-            "problemMatcher": [
-             
-            ]
-        }
-
+            "dependsOn": [
+                "compile-file-storage-tester",
+                "compile-file-upload",
+                "compile-file-download-service"
+            ],
+            "problemMatcher": []
+        },
+        
     ]
 }
