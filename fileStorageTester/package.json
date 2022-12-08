@@ -7,10 +7,10 @@
     "build": "npm run npm:install && npm run tsc:compile"
   },
   "dependencies": {
-    "body-parser": "^1.18.3",
+    "body-parser": "^1.20.1",
     "compression": "^1.7.3",
     "dotenv": "^6.1.0",
-    "express": "^4.16.4",
+    "express": "^4.18.2",
     "prompt": "^1.0.0"
   },
   "devDependencies": {
